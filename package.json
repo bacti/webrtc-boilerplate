@@ -1,0 +1,13 @@
+{
+  "name": "webrtc-boilerplate",
+  "author": "Hai Bacti",
+  "license": "ISC",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server -d --devtool source-map --port 8080 --host 0.0.0.0",
+    "release": "cross-env NODE_ENV=production webpack --progress --profile --colors",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  }
+}
