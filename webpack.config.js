@@ -19,10 +19,6 @@ let options =
             {
                 test: /\.(js|jsx)(\?\S*)?$/,
                 loader: 'babel-loader',
-                query:
-                {
-                    presets: ['es2015', 'stage-0'],
-                }
             },
             // {
             //     test: /\.glsl$/,
