@@ -11,6 +11,7 @@ function HandleSuccess(stream)
     const videoTracks = stream.getVideoTracks()
     const video = document.querySelector('video')
     video.srcObject = stream
+    // console.log(stream.getVideoTracks()[0].getSettings())
     console.log('Got stream with constraints:', Constraints)
     console.log(`Using video device: ${videoTracks[0].label}`)
 }
@@ -38,7 +39,7 @@ const Init = event =>
     {
         const { mediaDevices } = window.navigator
         mediaDevices.getUserMedia(Constraints).then(HandleSuccess)
-        event.target.disabled = true
+        // event.target.disabled = true
     }
     catch (error)
     {
@@ -46,7 +47,7 @@ const Init = event =>
     }
   }
 
-window.main = _ =>
-{
-    document.querySelector('#showVideo').addEventListener('click', Init)
-}
+window.main = _ => Init()
+// {
+//     document.querySelector('#showVideo').addEventListener('click', Init)
+// }
