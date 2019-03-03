@@ -5,11 +5,11 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 let options =
 {
-    entry: './js/main.js',
+    entry: './src/index.js',
     output:
     {
         path: path.resolve(__dirname, 'release'),
-        filename: 'main.js',
+        filename: 'index.js',
         publicPath: process.env.NODE_ENV == 'production' ? './' : '/',
     },
     module:
