@@ -1,3 +1,5 @@
+require('./index.css')
+
 const Constraints = 
 {
     audio: false,

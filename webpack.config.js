@@ -32,10 +32,10 @@ let options =
             //     test: /\.html$/,
             //     loader: 'html-loader'
             // },
-            // {
-            //     test: /\.css$/,
-            //     loader: 'style-loader!css-loader'
-            // },
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader'
+            },
             // {
             //     test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?\S*)?$/,
             //     loader: 'file-loader'
