@@ -24,26 +24,26 @@ let options =
                     presets: ['es2015', 'stage-0'],
                 }
             },
-            {
-                test: /\.glsl$/,
-                loader: 'webpack-glsl-loader'
-            },
-            {
-                test: /\.(vert|frag)$/,
-                loader: 'raw-loader',
-            },
-            {
-                test: /\.html$/,
-                loader: 'html-loader'
-            },
-            {
-                test: /\.css$/,
-                loader: 'style-loader!css-loader'
-            },
-            {
-                test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-                loader: 'file-loader'
-            }
+            // {
+            //     test: /\.glsl$/,
+            //     loader: 'webpack-glsl-loader'
+            // },
+            // {
+            //     test: /\.(vert|frag)$/,
+            //     loader: 'raw-loader',
+            // },
+            // {
+            //     test: /\.html$/,
+            //     loader: 'html-loader'
+            // },
+            // {
+            //     test: /\.css$/,
+            //     loader: 'style-loader!css-loader'
+            // },
+            // {
+            //     test: /\.(jpg|png|gif|eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+            //     loader: 'file-loader'
+            // },
         ]
     },
     devServer: {
