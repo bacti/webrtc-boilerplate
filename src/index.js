@@ -6,6 +6,7 @@ const Constraints =
 
 function HandleSuccess(stream)
 {
+    console.log(stream)
     const video = document.querySelector('video');
     const videoTracks = stream.getVideoTracks();
     console.log('Got stream with constraints:', constraints);
@@ -31,13 +32,14 @@ const Init = event =>
 {
     try
     {
-        const stream = await navigator.mediaDevices.getUserMedia(Constraints)
-        HandleSuccess(stream)
+        const { mediaDevices } = window.navigator
+        mediaDevices.getUserMedia(Constraints).then(HandleSuccess)
         event.target.disabled = true
     }
     catch (error)
     {
-        HandleError(error)
+        console.log(error)
+        // HandleError(error)
     }
   }
 
