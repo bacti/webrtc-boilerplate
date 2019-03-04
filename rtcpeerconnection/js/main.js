@@ -174,16 +174,11 @@ function onCreateAnswerSuccess(desc) {
   );
 }
 
-function onIceCandidate(pc, event) {
-  getOtherPc(pc).addIceCandidate(event.candidate)
-    .then(
-      function() {
-        onAddIceCandidateSuccess(pc);
-      },
-      function(err) {
-        onAddIceCandidateError(pc, err);
-      }
-    );
+function onIceCandidate(pc, event)
+{
+  getOtherPc(pc).
+    addIceCandidate(event.candidate)
+    .then(_ => onAddIceCandidateSuccess(pc), err => onAddIceCandidateError(pc, err))
   trace(getName(pc) + ' ICE candidate: \n' + (event.candidate ?
     event.candidate.candidate : '(null)'));
 }
@@ -216,5 +211,5 @@ function hangup() {
 // logging utility
 function trace(arg) {
   var now = (window.performance.now() / 1000).toFixed(3);
-  console.log(now + ': ', arg);
+  console.warn(now + ': ', arg);
 }
