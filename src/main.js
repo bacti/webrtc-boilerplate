@@ -161,8 +161,8 @@ function onCreateAnswerSuccess(desc) {
 
 function onIceCandidate(pc, event)
 {
-  getOtherPc(pc).
-    addIceCandidate(event.candidate)
+  getOtherPc(pc)
+    .addIceCandidate(event.candidate)
     .then(_ => onAddIceCandidateSuccess(pc), err => onAddIceCandidateError(pc, err))
   trace(getName(pc) + ' ICE candidate: \n' + (event.candidate ?
     event.candidate.candidate : '(null)'));
