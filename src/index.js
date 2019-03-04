@@ -54,7 +54,7 @@ window.main = _ =>
     // document.querySelector('#showVideo').addEventListener('click', Init)
 
     // assumptions
-    var pc = new PeerConnection({ sdpSemantics: 'Default' }, constraints);
+    var pc = new PeerConnection(null, constraints);
     var connection = new RealTimeConnection(); // could be socket.io or whatever
 
 
