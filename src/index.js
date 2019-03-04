@@ -1,11 +1,7 @@
 import  PeerConnection from 'rtcpeerconnection'
 require('./index.css')
 
-const Constraints = 
-{
-    audio: false,
-    video: true,
-}
+const constraints = { audio: false, video: true }
 
 function HandleSuccess(stream)
 {
@@ -13,7 +9,7 @@ function HandleSuccess(stream)
     const video = document.querySelector('video')
     video.srcObject = stream
     // console.log(stream.getVideoTracks()[0].getSettings())
-    console.log('Got stream with constraints:', Constraints)
+    console.log('Got stream with constraints:', constraints)
     console.log(`Using video device: ${videoTracks[0].label}`)
 }
   
@@ -21,7 +17,7 @@ function HandleError(error)
 {
     if (error.name === 'ConstraintNotSatisfiedError')
     {
-        let v = Constraints.video
+        let v = constraints.video
         console.log(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`)
     }
     else
@@ -39,7 +35,7 @@ const Init = event =>
     try
     {
         const { mediaDevices } = window.navigator
-        mediaDevices.getUserMedia(Constraints).then(HandleSuccess)
+        mediaDevices.getUserMedia(constraints).then(HandleSuccess)
         // event.target.disabled = true
     }
     catch (error)
@@ -58,7 +54,7 @@ window.main = _ =>
     // document.querySelector('#showVideo').addEventListener('click', Init)
 
     // assumptions
-    var pc = new PeerConnection(config, constraints);
+    var pc = new PeerConnection({ sdpSemantics: 'Default' }, constraints);
     var connection = new RealTimeConnection(); // could be socket.io or whatever
 
 
