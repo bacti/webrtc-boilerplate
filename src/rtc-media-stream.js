@@ -1,36 +1,39 @@
 import { Trace } from './log'
 export default class RTCMediaStream
 {
-    constructor(servers)
+    constructor(name, servers)
     {
+        this.name = name
         this.pc = new RTCPeerConnection(servers)
-        this.pc.onicecandidate = evt => this.OnIceCandidate(this.pc, evt)
-        this.pc.oniceconnectionstatechange = evt => this.OnIceStateChange(this.pc, evt)
+        this.pc.onicecandidate = evt => this.OnIceCandidate(evt)
+        this.pc.oniceconnectionstatechange = evt => this.OnIceStateChange(evt)
     }
 
-    OnIceCandidate(pc, evt)
+    SetPeer(otherpc)
     {
-        GetOtherPc(pc).addIceCandidate(evt.candidate)
-            .then(evt => this.OnAddIceCandidateSuccess(pc), err => this.OnAddIceCandidateError(pc, err))
-        Trace(getName(pc) + ' ICE candidate: \n' + (evt.candidate ? evt.candidate.candidate : '(null)'))
+        this.otherpc = otherpc
     }
 
-    OnAddIceCandidateSuccess(pc)
+    OnIceCandidate(evt)
     {
-        Trace(getName(pc) + ' addIceCandidate success')
+        this.otherpc.addIceCandidate(evt.candidate)
+            .then(evt => this.OnAddIceCandidateSuccess(), err => this.OnAddIceCandidateError(err))
+        Trace(this.name + ' ICE candidate: \n' + (evt.candidate ? evt.candidate.candidate : '(null)'))
+    }
+
+    OnAddIceCandidateSuccess()
+    {
+        Trace(this.name + ' addIceCandidate success')
     }
       
-    OnAddIceCandidateError(pc, error)
+    OnAddIceCandidateError(error)
     {
-        Trace(getName(pc) + ' failed to add ICE Candidate: ' + error.toString())
+        Trace(this.name + ' failed to add ICE Candidate: ' + error.toString())
     }
 
-    OnIceStateChange(pc, evt)
+    OnIceStateChange(evt)
     {
-        if (pc)
-        {
-            Trace(getName(pc) + ' ICE state: ' + pc.iceConnectionState)
-            console.log('ICE state change event: ', evt)
-        }
+        Trace(this.name + ' ICE state: ' + this.pc.iceConnectionState)
+        console.log('ICE state change event: ', evt)
     }
 }
