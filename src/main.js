@@ -1,5 +1,4 @@
 import { Trace } from './log'
-require('./main.css')
 
 var startButton = document.getElementById('startButton');
 var callButton = document.getElementById('callButton');

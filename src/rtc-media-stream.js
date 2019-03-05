@@ -1,5 +1,5 @@
 import { Trace } from './log'
-export default RTCMediaStream
+export default class RTCMediaStream
 {
     constructor(servers)
     {
