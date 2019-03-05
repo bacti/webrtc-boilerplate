@@ -5,9 +5,8 @@ require('./main.css')
 
 class App extends Component
 {
-    constructor()
+    componentDidMount()
     {
-        const startTime
         const startButton = document.getElementById('startButton')
         const callButton = document.getElementById('callButton')
         const hangupButton = document.getElementById('hangupButton')
