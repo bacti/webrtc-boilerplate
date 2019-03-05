@@ -5,6 +5,43 @@ require('./main.css')
 
 class App extends Component
 {
+    constructor()
+    {
+        const startTime
+        const startButton = document.getElementById('startButton')
+        const callButton = document.getElementById('callButton')
+        const hangupButton = document.getElementById('hangupButton')
+        callButton.disabled = true
+        hangupButton.disabled = true
+        startButton.onclick = start
+        callButton.onclick = call
+        hangupButton.onclick = hangup
+
+        const localVideo = document.getElementById('localVideo')
+        localVideo.addEventListener('loadedmetadata', function()
+        {
+            Trace(`Local video videoWidth: ${this.videoWidth}px, videoHeight: ${this.videoHeight}px`)
+        })
+        
+        const remoteVideo = document.getElementById('remoteVideo')
+        remoteVideo.addEventListener('loadedmetadata', function()
+        {
+            Trace(`Remote video videoWidth: ${this.videoWidth}px, videoHeight: ${this.videoHeight}px`)
+        })
+        remoteVideo.onresize = evt =>
+        {
+            Trace(`Remote video size changed to ${remoteVideo.videoWidth}x${remoteVideo.videoHeight}`)
+            // We'll use the first onsize callback as an indication that video has started
+            // playing out.
+            if (startTime)
+            {
+                const elapsedTime = window.performance.now() - startTime
+                Trace('Setup time: ' + elapsedTime.toFixed(3) + 'ms')
+                startTime = null
+            }
+        }
+    }
+
     render()
     {
         return (
