@@ -68,8 +68,8 @@ class App extends Component
             <div id="container">
                 <p>Check out the complete set of WebRTC demos at <a href="https://webrtc.github.io/samples/" title="WebRTC samples GitHub Pages">webrtc.github.io/samples</a>.</p>
 
-                <video ref={el => this.Ref('localVideo', el)} autoplay muted></video>
-                <video ref={el => this.Ref('remoteVideo', el)} autoplay></video>
+                <video ref={el => this.Ref('localVideo', el)} id='localVideo' autoplay muted></video>
+                <video ref={el => this.Ref('remoteVideo', el)} id='remoteVideo' autoplay></video>
 
                 <div>
                 <button id="startButton">Start</button>
