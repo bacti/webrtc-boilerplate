@@ -23,18 +23,16 @@ class App extends Component
 
     Call()
     {
-        callButton.disabled = true
-        hangupButton.disabled = false
+        this.callButton.disabled = true
+        this.hangupButton.disabled = false
         Trace('Starting call')
-        startTime = window.performance.now()
-        var videoTracks = localStream.getVideoTracks()
-        var audioTracks = localStream.getAudioTracks()
-        if (videoTracks.length > 0) {
-        Trace('Using video device: ' + videoTracks[0].label)
-        }
-        if (audioTracks.length > 0) {
-        Trace('Using audio device: ' + audioTracks[0].label)
-        }
+        this.startTime = window.performance.now()
+
+        const videoTracks = localStream.getVideoTracks()
+        videoTracks.length > 0 && Trace('Using video device: ' + videoTracks[0].label)
+        const audioTracks = localStream.getAudioTracks()
+        audioTracks.length > 0 && Trace('Using audio device: ' + audioTracks[0].label)
+    
         var servers = null
         pc1 = new RTCPeerConnection(servers)
         Trace('Created local peer connection object pc1')
@@ -83,11 +81,11 @@ class App extends Component
             Trace(`Remote video size changed to ${remoteVideo.videoWidth}x${remoteVideo.videoHeight}`)
             // We'll use the first onsize callback as an indication that video has started
             // playing out.
-            if (startTime)
+            if (this.startTime)
             {
-                const elapsedTime = window.performance.now() - startTime
+                const elapsedTime = window.performance.now() - this.startTime
                 Trace('Setup time: ' + elapsedTime.toFixed(3) + 'ms')
-                startTime = null
+                this.startTime = null
             }
         }
     }
