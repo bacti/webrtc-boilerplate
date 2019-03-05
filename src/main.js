@@ -1,4 +1,4 @@
-import { trace } from './Log'
+import { Trace } from './log'
 require('./main.css')
 
 var startButton = document.getElementById('startButton');
@@ -15,23 +15,23 @@ var localVideo = document.getElementById('localVideo');
 var remoteVideo = document.getElementById('remoteVideo');
 
 localVideo.addEventListener('loadedmetadata', function() {
-  trace('Local video videoWidth: ' + this.videoWidth +
+  Trace('Local video videoWidth: ' + this.videoWidth +
     'px,  videoHeight: ' + this.videoHeight + 'px');
 });
 
 remoteVideo.addEventListener('loadedmetadata', function() {
-  trace('Remote video videoWidth: ' + this.videoWidth +
+  Trace('Remote video videoWidth: ' + this.videoWidth +
     'px,  videoHeight: ' + this.videoHeight + 'px');
 });
 
 remoteVideo.onresize = function() {
-  trace('Remote video size changed to ' +
+  Trace('Remote video size changed to ' +
     remoteVideo.videoWidth + 'x' + remoteVideo.videoHeight);
   // We'll use the first onsize callback as an indication that video has started
   // playing out.
   if (startTime) {
     var elapsedTime = window.performance.now() - startTime;
-    trace('Setup time: ' + elapsedTime.toFixed(3) + 'ms');
+    Trace('Setup time: ' + elapsedTime.toFixed(3) + 'ms');
     startTime = null;
   }
 };
@@ -53,14 +53,14 @@ function getOtherPc(pc) {
 }
 
 function gotStream(stream) {
-  trace('Received local stream');
+  Trace('Received local stream');
   localVideo.srcObject = stream;
   localStream = stream;
   callButton.disabled = false;
 }
 
 function start() {
-  trace('Requesting local stream');
+  Trace('Requesting local stream');
   startButton.disabled = true;
   navigator.mediaDevices.getUserMedia({ audio: true, video: true })
     .then(gotStream)
@@ -73,23 +73,23 @@ function call()
 {
   callButton.disabled = true;
   hangupButton.disabled = false;
-  trace('Starting call');
+  Trace('Starting call');
   startTime = window.performance.now();
   var videoTracks = localStream.getVideoTracks();
   var audioTracks = localStream.getAudioTracks();
   if (videoTracks.length > 0) {
-    trace('Using video device: ' + videoTracks[0].label);
+    Trace('Using video device: ' + videoTracks[0].label);
   }
   if (audioTracks.length > 0) {
-    trace('Using audio device: ' + audioTracks[0].label);
+    Trace('Using audio device: ' + audioTracks[0].label);
   }
   var servers = null;
   pc1 = new RTCPeerConnection(servers);
-  trace('Created local peer connection object pc1');
+  Trace('Created local peer connection object pc1');
   pc1.onicecandidate = e => onIceCandidate(pc1, e);
 
   pc2 = new RTCPeerConnection(servers);
-  trace('Created remote peer connection object pc2');
+  Trace('Created remote peer connection object pc2');
   pc2.onicecandidate = e => onIceCandidate(pc2, e);
 
   pc1.oniceconnectionstatechange = e => onIceStateChange(pc1, e);
@@ -98,26 +98,26 @@ function call()
   pc2.onaddstream = gotRemoteStream;
 
   pc1.addStream(localStream);
-  trace('Added local stream to pc1');
+  Trace('Added local stream to pc1');
 
-  trace('pc1 createOffer start');
+  Trace('pc1 createOffer start');
   pc1.createOffer(offerOptions).then(onCreateOfferSuccess, onCreateSessionDescriptionError);
 }
 
 function onCreateSessionDescriptionError(error) {
-  trace('Failed to create session description: ' + error.toString());
+  Trace('Failed to create session description: ' + error.toString());
 }
 
 function onCreateOfferSuccess(desc)
 {
-  trace('Offer from pc1\n' + desc.sdp);
-  trace('pc1 setLocalDescription start');
+  Trace('Offer from pc1\n' + desc.sdp);
+  Trace('pc1 setLocalDescription start');
   pc1.setLocalDescription(desc)
     .then(evt => onSetLocalSuccess(pc1), onSetSessionDescriptionError);
-  trace('pc2 setRemoteDescription start');
+  Trace('pc2 setRemoteDescription start');
   pc2.setRemoteDescription(desc)
     .then(evt => onSetRemoteSuccess(pc2), onSetSessionDescriptionError);
-  trace('pc2 createAnswer start');
+  Trace('pc2 createAnswer start');
   // Since the 'remote' side has no media stream we need
   // to pass in the right constraints in order for it to
   // accept the incoming offer of audio and video.
@@ -125,32 +125,32 @@ function onCreateOfferSuccess(desc)
 }
 
 function onSetLocalSuccess(pc) {
-  trace(getName(pc) + ' setLocalDescription complete');
+  Trace(getName(pc) + ' setLocalDescription complete');
 }
 
 function onSetRemoteSuccess(pc) {
-  trace(getName(pc) + ' setRemoteDescription complete');
+  Trace(getName(pc) + ' setRemoteDescription complete');
 }
 
 function onSetSessionDescriptionError(error) {
-  trace('Failed to set session description: ' + error.toString());
+  Trace('Failed to set session description: ' + error.toString());
 }
 
 function gotRemoteStream(e) {
   remoteVideo.srcObject = e.stream;
-  trace('pc2 received remote stream');
+  Trace('pc2 received remote stream');
 }
 
 function onCreateAnswerSuccess(desc) {
-  trace('Answer from pc2:\n' + desc.sdp);
-  trace('pc2 setLocalDescription start');
+  Trace('Answer from pc2:\n' + desc.sdp);
+  Trace('pc2 setLocalDescription start');
   pc2.setLocalDescription(desc).then(
     function() {
       onSetLocalSuccess(pc2);
     },
     onSetSessionDescriptionError
   );
-  trace('pc1 setRemoteDescription start');
+  Trace('pc1 setRemoteDescription start');
   pc1.setRemoteDescription(desc).then(
     function() {
       onSetRemoteSuccess(pc1);
@@ -164,27 +164,27 @@ function onIceCandidate(pc, event)
   getOtherPc(pc)
     .addIceCandidate(event.candidate)
     .then(_ => onAddIceCandidateSuccess(pc), err => onAddIceCandidateError(pc, err))
-  trace(getName(pc) + ' ICE candidate: \n' + (event.candidate ?
+  Trace(getName(pc) + ' ICE candidate: \n' + (event.candidate ?
     event.candidate.candidate : '(null)'));
 }
 
 function onAddIceCandidateSuccess(pc) {
-  trace(getName(pc) + ' addIceCandidate success');
+  Trace(getName(pc) + ' addIceCandidate success');
 }
 
 function onAddIceCandidateError(pc, error) {
-  trace(getName(pc) + ' failed to add ICE Candidate: ' + error.toString());
+  Trace(getName(pc) + ' failed to add ICE Candidate: ' + error.toString());
 }
 
 function onIceStateChange(pc, event) {
   if (pc) {
-    trace(getName(pc) + ' ICE state: ' + pc.iceConnectionState);
+    Trace(getName(pc) + ' ICE state: ' + pc.iceConnectionState);
     console.log('ICE state change event: ', event);
   }
 }
 
 function hangup() {
-  trace('Ending call');
+  Trace('Ending call');
   pc1.close();
   pc2.close();
   pc1 = null;
