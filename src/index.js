@@ -53,7 +53,34 @@ class App extends Component
         pc1.addStream(this.localStream)
 
         Trace('pc1 createOffer start')
-        pc1.createOffer(offerOptions).then(onCreateOfferSuccess, onCreateSessionDescriptionError)
+        pc1.createOffer(offerOptions)
+            .then(desc => this.OnCreateOfferSuccess(desc), this.OnCreateSessionDescriptionError)
+    }
+
+    OnCreateOfferSuccess(desc)
+    {
+        Trace('Offer from pc1\n' + desc.sdp)
+        Trace('pc1 setLocalDescription start')
+        pc1.setLocalDescription(desc)
+            .then(evt => onSetLocalSuccess(pc1), this.OnSetSessionDescriptionError)
+        Trace('pc2 setRemoteDescription start')
+        pc2.setRemoteDescription(desc)
+            .then(evt => onSetRemoteSuccess(pc2), this.OnSetSessionDescriptionError)
+        Trace('pc2 createAnswer start')
+        // Since the 'remote' side has no media stream we need
+        // to pass in the right constraints in order for it to
+        // accept the incoming offer of audio and video.
+        pc2.createAnswer().then(onCreateAnswerSuccess, this.OnCreateSessionDescriptionError)
+    }
+
+    OnCreateSessionDescriptionError(error)
+    {
+        Trace('Failed to create session description: ' + error.toString())
+    }
+
+    OnSetSessionDescriptionError(error)
+    {
+        Trace('Failed to set session description: ' + error.toString())
     }
 
     Ref(ref, object)
