@@ -34,21 +34,23 @@ class App extends Component
         audioTracks.length > 0 && Trace('Using audio device: ' + audioTracks[0].label)
     
         var servers = null
-        pc1 = new RTCPeerConnection(servers)
+
         Trace('Created local peer connection object pc1')
-        pc1.onicecandidate = e => onIceCandidate(pc1, e)
-
-        pc2 = new RTCPeerConnection(servers)
+        let pc1 = new RTCMediaStream('pc1', servers)
         Trace('Created remote peer connection object pc2')
-        pc2.onicecandidate = e => onIceCandidate(pc2, e)
+        let pc2 = new RTCMediaStream('pc2', servers)
 
-        pc1.oniceconnectionstatechange = e => onIceStateChange(pc1, e)
-        pc2.oniceconnectionstatechange = e => onIceStateChange(pc2, e)
+        pc1.SetPeer(pc2)
+        pc2.SetPeer(pc1)
 
-        pc2.onaddstream = gotRemoteStream
+        pc2.onaddstream = evt =>
+        {
+            Trace('pc2 received remote stream')
+            this.remoteVideo.srcObject = evt.stream
+        }
 
-        pc1.addStream(this.localStream)
         Trace('Added local stream to pc1')
+        pc1.addStream(this.localStream)
 
         Trace('pc1 createOffer start')
         pc1.createOffer(offerOptions).then(onCreateOfferSuccess, onCreateSessionDescriptionError)
