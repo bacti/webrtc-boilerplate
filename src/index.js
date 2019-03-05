@@ -23,6 +23,11 @@ class App extends Component
         .catch(e => alert('getUserMedia() error: ' + e.name))
     }
 
+    Ref(ref, object)
+    {
+        this[ref] = object
+    }
+
     componentDidMount()
     {
         const startButton = document.getElementById('startButton')
@@ -39,12 +44,11 @@ class App extends Component
             Trace(`Local video videoWidth: ${this.videoWidth}px, videoHeight: ${this.videoHeight}px`)
         })
 
-        const remoteVideo = document.getElementById('remoteVideo')
-        remoteVideo.addEventListener('loadedmetadata', function()
+        this.remoteVideo.addEventListener('loadedmetadata', function()
         {
             Trace(`Remote video videoWidth: ${this.videoWidth}px, videoHeight: ${this.videoHeight}px`)
         })
-        remoteVideo.onresize = evt =>
+        this.remoteVideo.onresize = evt =>
         {
             Trace(`Remote video size changed to ${remoteVideo.videoWidth}x${remoteVideo.videoHeight}`)
             // We'll use the first onsize callback as an indication that video has started
@@ -64,8 +68,8 @@ class App extends Component
             <div id="container">
                 <p>Check out the complete set of WebRTC demos at <a href="https://webrtc.github.io/samples/" title="WebRTC samples GitHub Pages">webrtc.github.io/samples</a>.</p>
 
-                <video ref={video => (this.localVideo = video)} id="localVideo" autoplay muted></video>
-                <video id="remoteVideo" autoplay></video>
+                <video ref={el => this.Ref('localVideo', el)} autoplay muted></video>
+                <video ref={el => this.Ref('remoteVideo', el)} autoplay></video>
 
                 <div>
                 <button id="startButton">Start</button>
