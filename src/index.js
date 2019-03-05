@@ -15,7 +15,7 @@ class App extends Component
         {
             Trace('Received local stream')
             this.localVideo.srcObject = stream
-            // localStream = stream
+            this.localStream = stream
             this.callButton.disabled = false
         })
         .catch(e => alert('getUserMedia() error: ' + e.name))
@@ -28,9 +28,9 @@ class App extends Component
         Trace('Starting call')
         this.startTime = window.performance.now()
 
-        const videoTracks = localStream.getVideoTracks()
+        const videoTracks = this.localStream.getVideoTracks()
         videoTracks.length > 0 && Trace('Using video device: ' + videoTracks[0].label)
-        const audioTracks = localStream.getAudioTracks()
+        const audioTracks = this.localStream.getAudioTracks()
         audioTracks.length > 0 && Trace('Using audio device: ' + audioTracks[0].label)
     
         var servers = null
@@ -47,7 +47,7 @@ class App extends Component
 
         pc2.onaddstream = gotRemoteStream
 
-        pc1.addStream(localStream)
+        pc1.addStream(this.localStream)
         Trace('Added local stream to pc1')
 
         Trace('pc1 createOffer start')
