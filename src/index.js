@@ -21,6 +21,41 @@ class App extends Component
         .catch(e => alert('getUserMedia() error: ' + e.name))
     }
 
+    Call()
+    {
+        callButton.disabled = true
+        hangupButton.disabled = false
+        Trace('Starting call')
+        startTime = window.performance.now()
+        var videoTracks = localStream.getVideoTracks()
+        var audioTracks = localStream.getAudioTracks()
+        if (videoTracks.length > 0) {
+        Trace('Using video device: ' + videoTracks[0].label)
+        }
+        if (audioTracks.length > 0) {
+        Trace('Using audio device: ' + audioTracks[0].label)
+        }
+        var servers = null
+        pc1 = new RTCPeerConnection(servers)
+        Trace('Created local peer connection object pc1')
+        pc1.onicecandidate = e => onIceCandidate(pc1, e)
+
+        pc2 = new RTCPeerConnection(servers)
+        Trace('Created remote peer connection object pc2')
+        pc2.onicecandidate = e => onIceCandidate(pc2, e)
+
+        pc1.oniceconnectionstatechange = e => onIceStateChange(pc1, e)
+        pc2.oniceconnectionstatechange = e => onIceStateChange(pc2, e)
+
+        pc2.onaddstream = gotRemoteStream
+
+        pc1.addStream(localStream)
+        Trace('Added local stream to pc1')
+
+        Trace('pc1 createOffer start')
+        pc1.createOffer(offerOptions).then(onCreateOfferSuccess, onCreateSessionDescriptionError)
+    }
+
     Ref(ref, object)
     {
         this[ref] = object
@@ -31,7 +66,7 @@ class App extends Component
         this.callButton.disabled = true
         this.hangupButton.disabled = true
         this.startButton.onclick = _ => this.Start()
-        // callButton.onclick = call
+        callButton.onclick = _ => this.Call()
         // hangupButton.onclick = hangup
 
         this.localVideo.addEventListener('loadedmetadata', function()
@@ -60,23 +95,23 @@ class App extends Component
     render()
     {
         return (
-            <div id="container">
-                <p>Check out the complete set of WebRTC demos at <a href="https://webrtc.github.io/samples/" title="WebRTC samples GitHub Pages">webrtc.github.io/samples</a>.</p>
+            <div id='container'>
+                <p>Check out the complete set of WebRTC demos at <a href='https://webrtc.github.io/samples/' title='WebRTC samples GitHub Pages'>webrtc.github.io/samples</a>.</p>
 
                 <video ref={el => this.Ref('localVideo', el)} id='localVideo' autoplay muted></video>
                 <video ref={el => this.Ref('remoteVideo', el)} id='remoteVideo' autoplay></video>
 
                 <div>
-                <button ref={el => this.Ref('startButton', el)} id="startButton">Start</button>
-                <button ref={el => this.Ref('callButton', el)} id="callButton">Call</button>
-                <button ref={el => this.Ref('hangupButton', el)} id="hangupButton">Hang Up</button>
+                <button ref={el => this.Ref('startButton', el)} id='startButton'>Start</button>
+                <button ref={el => this.Ref('callButton', el)} id='callButton'>Call</button>
+                <button ref={el => this.Ref('hangupButton', el)} id='hangupButton'>Hang Up</button>
                 </div>
 
                 <p>View the console to see logging. The <code>MediaStream</code> object <code>localStream</code>, and the <code>RTCPeerConnection</code> objects <code>localPeerConnection</code> and <code>remotePeerConnection</code> are in global scope, so you can inspect them in the console as well.</p>
 
-                <p>For more information about RTCPeerConnection, see <a href="https://www.html5rocks.com/en/tutorials/webrtc/basics/" title="HTML5 Rocks article about WebRTC by Sam Dutton">Getting Started With WebRTC</a>.</p>
+                <p>For more information about RTCPeerConnection, see <a href='https://www.html5rocks.com/en/tutorials/webrtc/basics/' title='HTML5 Rocks article about WebRTC by Sam Dutton'>Getting Started With WebRTC</a>.</p>
 
-                <a href="https://github.com/samdutton/simpl/blob/gh-pages/rtcpeerconnection" title="View source for this page on GitHub" id="viewSource">View source on GitHub</a>
+                <a href='https://github.com/samdutton/simpl/blob/gh-pages/rtcpeerconnection' title='View source for this page on GitHub' id='viewSource'>View source on GitHub</a>
             </div>
         )
     }
