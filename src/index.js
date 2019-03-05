@@ -9,16 +9,14 @@ class App extends Component
     Start()
     {
         Trace('Requesting local stream')
-        const startButton = document.getElementById('startButton')
-        const callButton = document.getElementById('callButton')
-        startButton.disabled = true
+        this.startButton.disabled = true
         navigator.mediaDevices.getUserMedia({ audio: false, video: true })
         .then(stream =>
         {
             Trace('Received local stream')
             this.localVideo.srcObject = stream
             // localStream = stream
-            callButton.disabled = false
+            this.callButton.disabled = false
         })
         .catch(e => alert('getUserMedia() error: ' + e.name))
     }
@@ -30,12 +28,9 @@ class App extends Component
 
     componentDidMount()
     {
-        const startButton = document.getElementById('startButton')
-        const callButton = document.getElementById('callButton')
-        const hangupButton = document.getElementById('hangupButton')
-        callButton.disabled = true
-        hangupButton.disabled = true
-        startButton.onclick = _ => this.Start()
+        this.callButton.disabled = true
+        this.hangupButton.disabled = true
+        this.startButton.onclick = _ => this.Start()
         // callButton.onclick = call
         // hangupButton.onclick = hangup
 
@@ -72,9 +67,9 @@ class App extends Component
                 <video ref={el => this.Ref('remoteVideo', el)} id='remoteVideo' autoplay></video>
 
                 <div>
-                <button id="startButton">Start</button>
-                <button id="callButton">Call</button>
-                <button id="hangupButton">Hang Up</button>
+                <button ref={el => this.Ref('startButton', el)} id="startButton">Start</button>
+                <button ref={el => this.Ref('callButton', el)} id="callButton">Call</button>
+                <button ref={el => this.Ref('hangupButton', el)} id="hangupButton">Hang Up</button>
                 </div>
 
                 <p>View the console to see logging. The <code>MediaStream</code> object <code>localStream</code>, and the <code>RTCPeerConnection</code> objects <code>localPeerConnection</code> and <code>remotePeerConnection</code> are in global scope, so you can inspect them in the console as well.</p>
