@@ -11,13 +11,12 @@ class App extends Component
         Trace('Requesting local stream')
         const startButton = document.getElementById('startButton')
         const callButton = document.getElementById('callButton')
-        const localVideo = document.getElementById('localVideo')
         startButton.disabled = true
         navigator.mediaDevices.getUserMedia({ audio: false, video: true })
         .then(stream =>
         {
             Trace('Received local stream')
-            localVideo.srcObject = stream
+            this.localVideo.srcObject = stream
             // localStream = stream
             callButton.disabled = false
         })
@@ -31,12 +30,11 @@ class App extends Component
         const hangupButton = document.getElementById('hangupButton')
         callButton.disabled = true
         hangupButton.disabled = true
-        startButton.onclick = this.Start
+        startButton.onclick = _ => this.Start()
         // callButton.onclick = call
         // hangupButton.onclick = hangup
 
-        const localVideo = document.getElementById('localVideo')
-        localVideo.addEventListener('loadedmetadata', function()
+        this.localVideo.addEventListener('loadedmetadata', function()
         {
             Trace(`Local video videoWidth: ${this.videoWidth}px, videoHeight: ${this.videoHeight}px`)
         })
@@ -66,7 +64,7 @@ class App extends Component
             <div id="container">
                 <p>Check out the complete set of WebRTC demos at <a href="https://webrtc.github.io/samples/" title="WebRTC samples GitHub Pages">webrtc.github.io/samples</a>.</p>
 
-                <video id="localVideo" autoplay muted></video>
+                <video ref={video => (this.localVideo = video)} id="localVideo" autoplay muted></video>
                 <video id="remoteVideo" autoplay></video>
 
                 <div>
