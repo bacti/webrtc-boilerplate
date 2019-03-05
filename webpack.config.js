@@ -19,6 +19,13 @@ let options =
             {
                 test: /\.(js|jsx)(\?\S*)?$/,
                 loader: 'babel-loader',
+                query:
+                {
+                    plugins:
+                    [
+                        ['@babel/plugin-transform-react-jsx', { pragma: 'h' }]
+                    ]
+                }
             },
             // {
             //     test: /\.glsl$/,
