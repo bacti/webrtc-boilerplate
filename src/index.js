@@ -68,15 +68,36 @@ class App extends Component
         Trace('Offer from pc1\n' + desc.sdp)
         Trace('pc1 setLocalDescription start')
         this.pc1.setLocalDescription(desc)
-            .then(evt => onSetLocalSuccess(this.pc1), this.OnSetSessionDescriptionError)
+            .then(evt => this.OnSetLocalSuccess(this.pc1), this.OnSetSessionDescriptionError)
         Trace('pc2 setRemoteDescription start')
         this.pc2.setRemoteDescription(desc)
-            .then(evt => onSetRemoteSuccess(this.pc2), this.OnSetSessionDescriptionError)
+            .then(evt => this.OnSetRemoteSuccess(this.pc2), this.OnSetSessionDescriptionError)
         Trace('pc2 createAnswer start')
         // Since the 'remote' side has no media stream we need
         // to pass in the right constraints in order for it to
         // accept the incoming offer of audio and video.
-        this.pc2.createAnswer().then(onCreateAnswerSuccess, this.OnCreateSessionDescriptionError)
+        this.pc2.createAnswer().then(desc => this.OnCreateAnswerSuccess(desc), this.OnCreateSessionDescriptionError)
+    }
+
+    OnCreateAnswerSuccess(desc)
+    {
+        Trace('Answer from pc2:\n' + desc.sdp)
+        Trace('pc2 setLocalDescription start')
+        this.pc2.setLocalDescription(desc)
+            .then(evt => this.OnSetLocalSuccess(this.pc2), this.OnSetSessionDescriptionError)
+        Trace('pc1 setRemoteDescription start')
+        this.pc1.setRemoteDescription(desc)
+            .then(evt => this.OnSetRemoteSuccess(this.pc1), this.OnSetSessionDescriptionError)
+    }
+
+    OnSetLocalSuccess(pc)
+    {
+        Trace(pc.name + ' setLocalDescription complete')
+    }
+      
+    OnSetRemoteSuccess(pc)
+    {
+        Trace(pc.name + ' setRemoteDescription complete')
     }
 
     OnCreateSessionDescriptionError(error)
