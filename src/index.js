@@ -4,6 +4,12 @@ import { Trace } from './log'
 require('./main.css')
 // require('./main.js')
 
+const offerOptions =
+{
+    offerToReceiveAudio: 1,
+    offerToReceiveVideo: 1,
+}
+
 class App extends Component
 {
     Start()
@@ -36,24 +42,24 @@ class App extends Component
         var servers = null
 
         Trace('Created local peer connection object pc1')
-        let pc1 = new RTCMediaStream('pc1', servers)
+        this.pc1 = new RTCMediaStream('pc1', servers)
         Trace('Created remote peer connection object pc2')
-        let pc2 = new RTCMediaStream('pc2', servers)
+        this.pc2 = new RTCMediaStream('pc2', servers)
 
-        pc1.SetPeer(pc2)
-        pc2.SetPeer(pc1)
+        this.pc1.SetPeer(this.pc2)
+        this.pc2.SetPeer(this.pc1)
 
-        pc2.onaddstream = evt =>
+        this.pc2.onaddstream = evt =>
         {
             Trace('pc2 received remote stream')
             this.remoteVideo.srcObject = evt.stream
         }
 
         Trace('Added local stream to pc1')
-        pc1.addStream(this.localStream)
+        this.pc1.addStream(this.localStream)
 
         Trace('pc1 createOffer start')
-        pc1.createOffer(offerOptions)
+        this.pc1.createOffer(offerOptions)
             .then(desc => this.OnCreateOfferSuccess(desc), this.OnCreateSessionDescriptionError)
     }
 
@@ -61,16 +67,16 @@ class App extends Component
     {
         Trace('Offer from pc1\n' + desc.sdp)
         Trace('pc1 setLocalDescription start')
-        pc1.setLocalDescription(desc)
-            .then(evt => onSetLocalSuccess(pc1), this.OnSetSessionDescriptionError)
+        this.pc1.setLocalDescription(desc)
+            .then(evt => onSetLocalSuccess(this.pc1), this.OnSetSessionDescriptionError)
         Trace('pc2 setRemoteDescription start')
-        pc2.setRemoteDescription(desc)
-            .then(evt => onSetRemoteSuccess(pc2), this.OnSetSessionDescriptionError)
+        this.pc2.setRemoteDescription(desc)
+            .then(evt => onSetRemoteSuccess(this.pc2), this.OnSetSessionDescriptionError)
         Trace('pc2 createAnswer start')
         // Since the 'remote' side has no media stream we need
         // to pass in the right constraints in order for it to
         // accept the incoming offer of audio and video.
-        pc2.createAnswer().then(onCreateAnswerSuccess, this.OnCreateSessionDescriptionError)
+        this.pc2.createAnswer().then(onCreateAnswerSuccess, this.OnCreateSessionDescriptionError)
     }
 
     OnCreateSessionDescriptionError(error)
