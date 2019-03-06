@@ -5,6 +5,8 @@ export default class RTCMediaStream extends RTCPeerConnection
     {
         super(servers)
         this.name = name
+        this.onicecandidate = evt => this.OnIceCandidate(evt)
+        this.oniceconnectionstatechange = evt => this.OnIceStateChange(evt)
     }
 
     SetPeer(otherpc)
@@ -12,14 +14,14 @@ export default class RTCMediaStream extends RTCPeerConnection
         this.otherpc = otherpc
     }
 
-    onicecandidate(evt)
+    OnIceCandidate(evt)
     {
         this.otherpc.addIceCandidate(evt.candidate)
             .then(evt => Trace(this.name + ' addIceCandidate success'), err => Trace(this.name + ' failed to add ICE Candidate: ' + err.toString()))
         Trace(this.name + ' ICE candidate: \n' + (evt.candidate ? evt.candidate.candidate : '(null)'))
     }
 
-    oniceconnectionstatechange(evt)
+    OnIceStateChange(evt)
     {
         Trace(this.name + ' ICE state: ' + this.iceConnectionState)
         console.log('ICE state change event: ', evt)

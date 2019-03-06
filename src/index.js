@@ -2,7 +2,6 @@ import { h, render, Component } from 'preact'
 import RTCMediaStream from './rtc-media-stream'
 import { Trace } from './log'
 require('./main.css')
-// require('./main.js')
 
 const offerOptions =
 {
