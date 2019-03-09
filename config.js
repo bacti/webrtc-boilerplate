@@ -1,6 +1,6 @@
 module.exports =
 {
     SERVER_DOMAIN: 'localhost',
-    SERVER_PORT: 4433,
+    SERVER_PORT: 8443,
     CLIENT_PORT: 80,
 }
