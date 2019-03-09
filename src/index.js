@@ -9,6 +9,10 @@ const offerOptions =
     offerToReceiveVideo: 1,
 }
 
+// this.socket = require('socket.io-client')(`ws://${SERVER_DOMAIN}:${SERVER_PORT}/`, { transports: ['websocket'] })
+// this.socket.send('n')
+// this.socket.on('message', message => console.log(message))
+        
 class App extends Component
 {
     Start()
