@@ -62,6 +62,17 @@ class App extends Component
             .then(desc => this.OnCreateOfferSuccess(desc), this.OnCreateSessionDescriptionError)
     }
 
+    Hangup()
+    {
+        Trace('Ending call')
+        this.pc1.close()
+        this.pc2.close()
+        this.pc1 = null
+        this.pc2 = null
+        this.hangupButton.disabled = true
+        this.callButton.disabled = false
+    }
+
     OnCreateOfferSuccess(desc)
     {
         Trace('Offer from pc1\n' + desc.sdp)

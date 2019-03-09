@@ -27,7 +27,7 @@ class Server extends EventEmitter
 
         const handler = http.createServer()
         handler.listen(Config.SERVER_PORT, evt => console.log(`Listening on ${Config.SERVER_PORT}`))
-        let sio = require('socket.io')(handler, {transports: ['websocket']})
+        let sio = require('socket.io')(handler, { transports: ['websocket'] })
         sio.on('connection', client => this.emit('connection', client))
     }
 }
