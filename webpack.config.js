@@ -16,17 +16,17 @@ let options =
     {
         rules:
         [
-            {
-                test: /\.(js|jsx)(\?\S*)?$/,
-                loader: 'babel-loader',
-                query:
-                {
-                    plugins:
-                    [
-                        ['@babel/plugin-transform-react-jsx', { pragma: 'h' }]
-                    ]
-                }
-            },
+            // {
+            //     test: /\.(js|jsx)(\?\S*)?$/,
+            //     loader: 'babel-loader',
+            //     query:
+            //     {
+            //         plugins:
+            //         [
+            //             ['@babel/plugin-transform-react-jsx', { pragma: 'h' }]
+            //         ]
+            //     }
+            // },
             {
                 test: /\.(ts|tsx)(\?\S*)?$/,
                 loader: 'ts-loader',
