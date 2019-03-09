@@ -3,7 +3,7 @@ const FS = require('fs-extra')
 const EventEmitter = require('./EventEmitter')
 const express = require('express')
 const http = require('http')
-const Config = require('../config')
+const Config = require('../../config')
 
 const RELEASE = PATH.join(process.cwd(), 'dist')
 
