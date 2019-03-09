@@ -1,7 +1,7 @@
 const nodemon = require('nodemon')
 const path = require('path')
 
-nodemon({script: path.join(__dirname, 'src', 'main.js'), ext: 'js', watch:'src'})
+nodemon({script: path.join(__dirname, 'src', 'server', 'index.js'), ext: 'js', watch:'src'})
 
 nodemon
 .on('start', _ => console.log(`App Started at ${Date().toString()}`))
