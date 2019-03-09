@@ -5,7 +5,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 let options =
 {
-    entry: './src/index.js',
+    entry: './src/index.ts',
     output:
     {
         path: path.resolve(__dirname, 'release'),
@@ -26,6 +26,11 @@ let options =
                         ['@babel/plugin-transform-react-jsx', { pragma: 'h' }]
                     ]
                 }
+            },
+            {
+                test: /\.(ts|tsx)(\?\S*)?$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/,
             },
             // {
             //     test: /\.glsl$/,
@@ -65,6 +70,7 @@ let options =
     resolveLoader:
     {
         modules: [path.resolve('./node_modules')],
+        extensions: ['.tsx', '.ts', '.js'],
     },
     resolve:
     {
