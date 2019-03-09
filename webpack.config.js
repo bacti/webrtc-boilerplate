@@ -5,7 +5,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 let options =
 {
-    entry: './src/index.ts',
+    entry: './src/index.tsx',
     output:
     {
         path: path.resolve(__dirname, 'release'),
