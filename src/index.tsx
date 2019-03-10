@@ -13,14 +13,30 @@ const PEER_CONNECTION_CONFIG =
     ]
 }
 
+const Identifier =
+{
+    get random()
+    {
+        return [...Array(6)].reduce(code => code + '0123456789ABDEFGHJKLMNPRSTUVXYZ'[~~(Math.random() * 31)], '')
+    }
+}
+
 class PeerGambler extends Component
 {
     private socket = connect(`ws://${SERVER_DOMAIN}:${SERVER_PORT}/`, {transports: ['websocket']})
+    private connection = new RTCPeerConnection(PEER_CONNECTION_CONFIG)
 
     constructor()
     {
         super()
         this.socket.on('connected', message => console.log(message))
+        this.connection.onicecandidate = event =>
+        {
+            if (event.candidate != null)
+            {
+                this.socket.send(JSON.stringify({ 'ice': event.candidate, 'uuid': Identifier.random }))
+            }
+        }
     }
 
     Start(isCaller)
