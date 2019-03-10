@@ -1,12 +1,17 @@
 import { h, render, Component } from 'preact'
+import { connect } from 'socket.io-client'
 import { Trace } from './log'
+import { SERVER_DOMAIN, SERVER_PORT } from '../config'
 import './index.css'
 
 class PeerGambler extends Component
 {
+    private socket = connect(`ws://${SERVER_DOMAIN}:${SERVER_PORT}/`, {transports: ['websocket']})
+
     constructor()
     {
         super()
+        this.socket.on('connected', message => console.log(message))
     }
 
     componentDidMount()
