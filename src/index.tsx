@@ -9,13 +9,28 @@ class PeerGambler extends Component
         super()
     }
 
+    componentDidMount()
+    {
+        const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
+        const btn_broadcast = document.getElementById('btn_broadcast') as HTMLInputElement
+        btn_broadcast.addEventListener('click', (evt: Event) =>
+        {
+            btn_broadcast.disabled = true
+            navigator.mediaDevices.getUserMedia({ audio: false, video: true })
+            .then(stream =>
+            {
+                Trace('Received local stream')
+                video_streaming.srcObject = stream
+            })
+            .catch(error => alert('getUserMedia() error: ' + error.name))
+        })
+    }
+
     render()
     {
         return (
             <div id='container'>
-                <video id='localVideo' muted autoPlay>
-                    <source src='https://www.w3schools.com/html/mov_bbb.mp4' type='video/mp4' />
-                </video>
+                <video id='video_streaming' muted autoPlay />
                 <div id='broadcast'>
                     <input type='button' value='Broadcast' id='btn_broadcast'></input>
                     <input type='text' value='' id='url_broadcast' disabled></input>
@@ -32,6 +47,6 @@ declare global
 
 window.main = () =>
 {
-    Trace('bacti')
+    Trace('blackjack-online')
     render(<PeerGambler />, document.body)
 }

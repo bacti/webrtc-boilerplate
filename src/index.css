@@ -8,7 +8,7 @@ video {
 #broadcast {
     position: absolute;
     margin: 10px;
-    bottom: 0px;
+    top: 0px;
 }
 
 #url_broadcast {
