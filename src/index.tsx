@@ -1,7 +1,7 @@
 import { h, render, Component } from 'preact'
 import { Trace } from './log'
 
-class Hello extends Component
+class PeerGambler extends Component
 {
     constructor()
     {
@@ -26,5 +26,5 @@ declare global
 window.main = () =>
 {
     Trace('bacti')
-    render(<Hello />, document.body)
+    render(<PeerGambler />, document.body)
 }
