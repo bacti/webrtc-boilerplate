@@ -70,11 +70,11 @@ let options =
     resolveLoader:
     {
         modules: [path.resolve('./node_modules')],
-        extensions: ['.tsx', '.ts', '.js'],
     },
     resolve:
     {
         modules: [path.resolve('./node_modules')],
+        extensions: ['.tsx', '.ts', '.js'],
     },
 }
 if (process.env.NODE_ENV == 'production')

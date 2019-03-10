@@ -1,4 +1,5 @@
 import { h, render, Component } from 'preact'
+import { Trace } from './log'
 
 class Hello extends Component<{ compiler: string; framework: string }, {}>
 {
@@ -15,5 +16,6 @@ declare global
 
 window.main = () =>
 {
+    Trace('bacti')
     render(<Hello compiler="TypeScript" framework="React" />, document.body)
 }
