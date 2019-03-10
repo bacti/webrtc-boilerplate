@@ -18,7 +18,7 @@ class PeerGambler extends Component
                 </video>
                 <div id='broadcast'>
                     <input type='button' value='Broadcast' id='btn_broadcast'></input>
-                    <input type='text' value='http://www.bacti.space' id='url_broadcast' disabled></input>
+                    <input type='text' value='' id='url_broadcast' disabled></input>
                 </div>
             </div>
         )
