@@ -16,6 +16,10 @@ class PeerGambler extends Component
                 <video id='localVideo' muted autoPlay>
                     <source src='https://www.w3schools.com/html/mov_bbb.mp4' type='video/mp4' />
                 </video>
+                <div id='broadcast'>
+                    <input type='button' value='Broadcast' id='btn_broadcast'></input>
+                    <input type='text' value='http://www.bacti.space' id='url_broadcast' disabled></input>
+                </div>
             </div>
         )
     }
