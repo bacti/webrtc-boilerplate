@@ -1,11 +1,20 @@
 import { h, render, Component } from 'preact'
 import { Trace } from './log'
 
-class Hello extends Component<{ compiler: string; framework: string }, {}>
+class Hello extends Component
 {
+    constructor()
+    {
+        super()
+    }
+
     render()
     {
-        return <h1>Hello from {this.props.compiler} and {this.props.framework}!</h1>;
+        return (
+            <div id='container'>
+                <video id='localVideo' muted={true}></video>
+            </div>
+        )
     }
 }
 
@@ -17,5 +26,5 @@ declare global
 window.main = () =>
 {
     Trace('bacti')
-    render(<Hello compiler="TypeScript" framework="React" />, document.body)
+    render(<Hello />, document.body)
 }
