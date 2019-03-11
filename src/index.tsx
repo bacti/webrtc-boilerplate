@@ -80,6 +80,7 @@ class PeerGambler extends Component
         }
         this.connection.ontrack = event =>
         {
+            Trace('ontrack')
             const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
             video_streaming.srcObject = event.streams[0]
         }
@@ -90,15 +91,16 @@ class PeerGambler extends Component
         if (this.isdealer)
         {
             this.socket.send('n')
-            this.connection.createOffer(OFFER_OPTIONS).then(description => this.CreatedDescription(description))
+            this.connection.createOffer(OFFER_OPTIONS).then(description => this.CreatedDescription(description, true))
         }
     }
 
-    CreatedDescription(description: RTCSessionDescriptionInit)
+    CreatedDescription(description: RTCSessionDescriptionInit, host: boolean = false)
     {
         this.connection.setLocalDescription(description).then(evt =>
         {
-            this.socket.send('w.' + btoa(JSON.stringify(
+            const prefix = host ? 'h' : ''
+            this.socket.send(prefix + 'w.' + btoa(JSON.stringify(
             {
                 'sdp': this.connection.localDescription,
                 'uuid': this.uuid,

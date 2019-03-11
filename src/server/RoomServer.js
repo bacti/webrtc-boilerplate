@@ -47,6 +47,11 @@ module.exports = new class RoomServer
                 this.FindGame(client, message)
                 break
             }
+            case 'hw':
+            {
+                this.HostDesc(client, message)
+                break
+            }
             case 'w':
             {
                 this.PeerService(client, message)
@@ -66,8 +71,7 @@ module.exports = new class RoomServer
         {
             id: Identifier.random,
             host: client,
-            players: [],
-            messages: [],
+            players: [ client ],
         }
 
         this.games[game.id] = game
@@ -88,21 +92,18 @@ module.exports = new class RoomServer
 
         game.players.push(client)
         client.game = game
-        client.send(game.messages[0]) // bacti
+        client.send(game.host_desc)
+    }
+
+    HostDesc(client, message)
+    {
+        const { game } = client
+        game.host_desc = message
     }
 
     PeerService(client, message)
     {
         const { game } = client
-        if (client.host)
-        {
-            console.log('host message', message)
-            game.messages.push(message)
-        }
-        else
-        {
-            console.log('player message', message)
-            game.host.send(message)
-        }
+        game.players.forEach(client => client.send(message))
     }
 }
