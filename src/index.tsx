@@ -52,7 +52,7 @@ class PeerGambler extends Component
         {
             if (event.candidate != null)
             {
-                this.socket.send(JSON.stringify({'ice': event.candidate, 'uuid': Identifier.random}))
+                this.socket.send('w.' + JSON.stringify({'ice': event.candidate, 'uuid': Identifier.random}))
             }
         }
         this.connection.ontrack = event =>
@@ -75,7 +75,7 @@ class PeerGambler extends Component
     {
         this.connection.setLocalDescription(description).then(evt =>
         {
-            this.socket.send(JSON.stringify(
+            this.socket.send('w.' + JSON.stringify(
             {
                 'sdp': this.connection.localDescription,
                 'uuid': Identifier.random,

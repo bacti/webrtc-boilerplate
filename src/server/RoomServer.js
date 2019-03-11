@@ -15,7 +15,6 @@ module.exports = new class RoomServer
         this.games = {}
         this.game_count = 0
 
-        this.fake_latency = 100
         this.local_time = 0
         this.lastTimestamp = new Date().getTime()
 
@@ -30,22 +29,7 @@ module.exports = new class RoomServer
 
     OnMessage(client, message)
     {
-        if (this.fake_latency > 0)
-        {
-            this.messages.push({client: client, message: message})
-            setTimeout(evt =>
-            {
-                if (this.messages.length)
-                {
-                    this.OnMessageImpl(this.messages[0].client, this.messages[0].message)
-                    this.messages.splice(0, 1)
-                }
-            }, this.fake_latency)
-        }
-        else
-        {
-            this.OnMessageImpl(client, message)
-        }
+        this.OnMessageImpl(client, message)
     }
     
     OnMessageImpl(client, msg)
@@ -63,39 +47,51 @@ module.exports = new class RoomServer
                 this.FindGame(client, message)
                 break
             }
+            case 'w':
+            {
+                this.PeerService(client, message)
+                break
+            }
             default:
             {
                 console.log(msg)
-                client.game && client.game.host.send(msg)
                 break
             }
         }
     }
 
-    CreateGame(player)
+    CreateGame(client)
     {
         const game =
         {
             id: Identifier.random,
-            host: player,
+            host: client,
             players: [],
         }
 
         this.games[game.id] = game
         this.game_count++
 
-        player.game = game
-        player.send(`n.${game.id}`)
+        client.game = game
+        client.host = true
+        client.send(`n.${game.id}`)
         console.log(`Create game ${game.id}`)
     }
 
-    FindGame(player, uri)
+    FindGame(client, uri)
     {
         console.log('Find game ' + uri)
         const game = this.games[uri]
         if (!game || game.players.length >= MAX_PLAYER)
-            return player.send('s.u') // unavailable
+            return client.send('s.u') // unavailable
 
-        game.players.push(player)
+        client.game = game
+        game.players.push(client)
+    }
+
+    PeerService(client, message)
+    {
+        console.log(message)
+        console.log(client.host)
     }
 }
