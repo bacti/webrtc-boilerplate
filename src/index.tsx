@@ -26,11 +26,12 @@ class PeerGambler extends Component
     private socket = connect(`ws://${SERVER_DOMAIN}:${SERVER_PORT}/`, {transports: ['websocket']})
     private connection = new RTCPeerConnection(PEER_CONNECTION_CONFIG)
     private tableId = window.location.search.slice(1)
+    state = { url_broadcast: '' }
 
     constructor()
     {
         super()
-        this.socket.on('connected', message => this.socket.send('n'))
+        // this.socket.on('connected', message => )
         this.socket.on('message', message =>
         {
             // console.log(message)
@@ -38,7 +39,7 @@ class PeerGambler extends Component
 			{
 				const [_, uri] = message.split('.')
 				const url = `http://${SERVER_DOMAIN}:${CLIENT_PORT}/?${uri}`
-				console.log(url)
+				this.setState({ url_broadcast: url })
 			}
         })
 
@@ -92,6 +93,7 @@ class PeerGambler extends Component
             {
                 const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
                 video_streaming.srcObject = stream
+                this.socket.send('n')
                 this.Start(true)
             })
             .catch(error => Error('getUserMedia() error: ' + error.name))
@@ -105,7 +107,7 @@ class PeerGambler extends Component
                 <video id='video_streaming' muted autoPlay />
                 <div id='broadcast'>
                     <input type='button' value='Broadcast' id='btn_broadcast'></input>
-                    <input type='text' value='' id='url_broadcast' disabled></input>
+                    <input type='text' value={this.state.url_broadcast} size={50} id='url_broadcast' disabled></input>
                 </div>
             </div>
         )
