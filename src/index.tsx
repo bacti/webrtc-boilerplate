@@ -42,7 +42,7 @@ class PeerGambler extends Component
             }
             else
             {
-                const signal = JSON.parse(message)
+                const signal = JSON.parse(atob(message))
                 console.log(signal)
 
                 // // Ignore messages from ourself
@@ -92,11 +92,11 @@ class PeerGambler extends Component
     {
         this.connection.setLocalDescription(description).then(evt =>
         {
-            this.socket.send('w.' + JSON.stringify(
+            this.socket.send('w.' + btoa(JSON.stringify(
             {
                 'sdp': this.connection.localDescription,
                 'uuid': UUID(),
-            }))
+            })))
         })
     }
 
