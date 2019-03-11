@@ -14,6 +14,11 @@ const PEER_CONNECTION_CONFIG =
         {'urls': 'stun:stun.l.google.com:19302'},
     ]
 }
+const OFFER_OPTIONS =
+{
+    offerToReceiveAudio: false,
+    offerToReceiveVideo: true,
+}
 
 class PeerGambler extends Component
 {
@@ -87,7 +92,7 @@ class PeerGambler extends Component
         if (this.isdealer)
         {
             this.socket.send('n')
-            this.connection.createOffer().then(description => this.CreatedDescription(description))
+            this.connection.createOffer(OFFER_OPTIONS).then(description => this.CreatedDescription(description))
         }
     }
 
