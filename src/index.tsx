@@ -29,7 +29,7 @@ class PeerGambler extends Component
     constructor()
     {
         super()
-        this.socket.on('connected', message => console.log(message))
+        this.socket.on('connected', message => this.socket.send('n'))
         this.connection.onicecandidate = event =>
         {
             if (event.candidate != null)
