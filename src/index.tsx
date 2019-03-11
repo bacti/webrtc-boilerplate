@@ -17,7 +17,7 @@ const Identifier =
 {
     get random()
     {
-        return [...Array(6)].reduce(code => code + '0123456789ABDEFGHJKLMNPRSTUVXYZ'[~~(Math.random() * 31)], '')
+        return [...Array(16)].reduce(code => code + '0123456789ABDEFGHJKLMNPRSTUVXYZ'[~~(Math.random() * 31)], '')
     }
 }
 
