@@ -63,11 +63,11 @@ class PeerGambler extends Component
                             }
                         })
                 }
-                // else
-                // if (signal.ice)
-                // {
-                //     this.connection.addIceCandidate(new RTCIceCandidate(signal.ice)).catch(errorHandler)
-                // }
+                else
+                if (signal.ice)
+                {
+                    this.connection.addIceCandidate(new RTCIceCandidate(signal.ice))
+                }
             }
         })
 
