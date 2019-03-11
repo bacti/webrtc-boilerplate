@@ -43,6 +43,7 @@ class PeerGambler extends Component
             else
             {
                 const signal = JSON.parse(atob(message))
+                console.log(signal)
                 if (signal.sdp)
                 {
                     this.connection.setRemoteDescription(new RTCSessionDescription(signal.sdp))
@@ -64,8 +65,10 @@ class PeerGambler extends Component
 
         this.connection.onicecandidate = event =>
         {
+            Trace('onicecandidate')
             if (event.candidate != null)
             {
+                Trace('onicecandidate 1')
                 this.socket.send('w.' + JSON.stringify({'ice': event.candidate, 'uuid': UUID()}))
             }
         }

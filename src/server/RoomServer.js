@@ -93,11 +93,16 @@ module.exports = new class RoomServer
 
     PeerService(client, message)
     {
+        const { game } = client
         if (client.host)
         {
-            console.log(message)
-            const { game } = client
+            console.log('host message', message)
             game.messages.push(message)
+        }
+        else
+        {
+            console.log('player message', message)
+            game.host.send(message)
         }
     }
 }
