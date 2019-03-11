@@ -43,20 +43,17 @@ class PeerGambler extends Component
             else
             {
                 const signal = JSON.parse(atob(message))
-                console.log(signal)
-
-                // // Ignore messages from ourself
-                // if(signal.uuid == uuid) return
-
-                // if (signal.sdp)
-                // {
-                //     this.connection.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function() {
-                //     // Only create answers in response to offers
-                //     if(signal.sdp.type == 'offer') {
-                //         this.connection.createAnswer().then(createdDescription).catch(errorHandler);
-                //     }
-                //     }).catch(errorHandler);
-                // }
+                if (signal.sdp)
+                {
+                    this.connection.setRemoteDescription(new RTCSessionDescription(signal.sdp))
+                        .then(evt =>
+                        {
+                            if (signal.sdp.type == 'offer')
+                            {
+                                this.connection.createAnswer().then(description => this.CreatedDescription(description))
+                            }
+                        })
+                }
                 // else
                 // if (signal.ice)
                 // {
