@@ -34,7 +34,7 @@ class PeerGambler extends Component
         {
             if (event.candidate != null)
             {
-                this.socket.send(JSON.stringify({ 'ice': event.candidate, 'uuid': Identifier.random }))
+                this.socket.send(JSON.stringify({'ice': event.candidate, 'uuid': Identifier.random}))
             }
         }
         this.connection.ontrack = event =>
@@ -44,16 +44,29 @@ class PeerGambler extends Component
         }
     }
 
-    Start()
+    Start(isCaller: boolean = false)
     {
         // peerConnection = new RTCPeerConnection(PeerConnectionConfig);
         // peerConnection.onicecandidate = gotIceCandidate;
         // peerConnection.ontrack = gotRemoteStream;
         // this.connection.addTrack(track)
       
-        // if(isCaller) {
-        //   peerConnection.createOffer().then(createdDescription).catch(errorHandler);
-        // }
+        if (isCaller)
+        {
+            this.connection.createOffer().then(description => this.CreatedDescription(description))
+        }
+    }
+
+    CreatedDescription(description: RTCSessionDescriptionInit)
+    {
+        this.connection.setLocalDescription(description).then(evt =>
+        {
+            this.socket.send(JSON.stringify(
+            {
+                'sdp': this.connection.localDescription,
+                'uuid': Identifier.random,
+            }))
+        })
     }
 
     componentDidMount()
@@ -67,7 +80,7 @@ class PeerGambler extends Component
             {
                 const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
                 video_streaming.srcObject = stream
-                this.Start()
+                this.Start(true)
             })
             .catch(error => Error('getUserMedia() error: ' + error.name))
         })
