@@ -67,6 +67,7 @@ module.exports = new class RoomServer
             id: Identifier.random,
             host: client,
             players: [],
+            messages: [],
         }
 
         this.games[game.id] = game
@@ -85,13 +86,18 @@ module.exports = new class RoomServer
         if (!game || game.players.length >= MAX_PLAYER)
             return client.send('s.u') // unavailable
 
-        client.game = game
         game.players.push(client)
+        client.game = game
+        client.send(game.messages[0]) // bacti
     }
 
     PeerService(client, message)
     {
-        console.log(message)
-        console.log(client.host)
+        if (client.host)
+        {
+            console.log(message)
+            const { game } = client
+            game.messages.push(message)
+        }
     }
 }

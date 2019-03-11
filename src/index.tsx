@@ -45,7 +45,29 @@ class PeerGambler extends Component
 				const [_, uri] = message.split('.')
 				const url = `http://${SERVER_DOMAIN}:${CLIENT_PORT}/?${uri}`
 				this.setState({ url_broadcast: url })
-			}
+            }
+            else
+            {
+                const signal = JSON.parse(message.data)
+
+                // // Ignore messages from ourself
+                // if(signal.uuid == uuid) return
+
+                // if (signal.sdp)
+                // {
+                //     this.connection.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function() {
+                //     // Only create answers in response to offers
+                //     if(signal.sdp.type == 'offer') {
+                //         this.connection.createAnswer().then(createdDescription).catch(errorHandler);
+                //     }
+                //     }).catch(errorHandler);
+                // }
+                // else
+                // if (signal.ice)
+                // {
+                //     this.connection.addIceCandidate(new RTCIceCandidate(signal.ice)).catch(errorHandler)
+                // }
+            }
         })
 
         this.connection.onicecandidate = event =>
