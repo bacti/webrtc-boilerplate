@@ -32,7 +32,7 @@ class PeerGambler extends Component
     constructor()
     {
         super()
-        // this.socket.on('connected', message => )
+        this.socket.on('connected', message => console.log(message))
         this.socket.on('message', message =>
         {
             // console.log(message)

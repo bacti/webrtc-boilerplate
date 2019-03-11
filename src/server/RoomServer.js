@@ -64,21 +64,11 @@ class RoomServer
                 this.FindGame(client, message)
                 break
             }
-            case 'i':
+            default:
             {
                 client.game && client.game.player_host.send(msg)
                 break
             }
-            // case 'p':
-            // {
-            //     client.send('s.p.' + message_parts[1]) // respond to client ping
-            //     break
-            // }
-            // case 'l':
-            // {
-            //     this.fake_latency = parseFloat(message_parts[1]) // a client is asking for lag simulation
-            //     break
-            // }
         }
     }
 
