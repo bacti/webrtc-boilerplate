@@ -73,11 +73,9 @@ class PeerGambler extends Component
 
         this.connection.onicecandidate = event =>
         {
-            Trace('onicecandidate')
             if (event.candidate != null)
             {
-                Trace('onicecandidate 1')
-                this.socket.send('w.' + JSON.stringify({'ice': event.candidate, 'uuid': this.uuid}))
+                this.socket.send('w.' + btoa(JSON.stringify({'ice': event.candidate, 'uuid': this.uuid})))
             }
         }
         this.connection.ontrack = event =>
