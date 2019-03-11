@@ -45,6 +45,8 @@ class PeerGambler extends Component
             {
                 const signal = JSON.parse(atob(message))
                 console.log(signal)
+                if (signal.uuid == this.uuid)
+                    return
                 if (signal.sdp)
                 {
                     this.connection.setRemoteDescription(new RTCSessionDescription(signal.sdp))
