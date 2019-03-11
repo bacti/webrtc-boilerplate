@@ -81,6 +81,9 @@ class PeerGambler extends Component
 
     componentDidMount()
     {
+        if (!this.isdealer)
+            return
+        
         const btn_broadcast = document.getElementById('btn_broadcast') as HTMLInputElement
         btn_broadcast.addEventListener('click', (evt: Event) =>
         {
