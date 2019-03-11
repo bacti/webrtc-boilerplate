@@ -25,7 +25,8 @@ class PeerGambler extends Component
 {
     private socket = connect(`ws://${SERVER_DOMAIN}:${SERVER_PORT}/`, {transports: ['websocket']})
     private connection = new RTCPeerConnection(PEER_CONNECTION_CONFIG)
-    private tableId = window.location.search.slice(1)
+    private tableid = window.location.search.slice(1)
+    private isdealer = this.tableid.length == 0
     state = { url_broadcast: '' }
 
     constructor()
@@ -57,15 +58,11 @@ class PeerGambler extends Component
         }
     }
 
-    Start(isCaller: boolean = false)
+    Start()
     {
-        // peerConnection = new RTCPeerConnection(PeerConnectionConfig);
-        // peerConnection.onicecandidate = gotIceCandidate;
-        // peerConnection.ontrack = gotRemoteStream;
-        // this.connection.addTrack(track)
-      
-        if (isCaller)
+        if (this.isdealer)
         {
+            this.socket.send('n')
             this.connection.createOffer().then(description => this.CreatedDescription(description))
         }
     }
@@ -93,8 +90,7 @@ class PeerGambler extends Component
             {
                 const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
                 video_streaming.srcObject = stream
-                this.socket.send('n')
-                this.Start(true)
+                this.Start()
             })
             .catch(error => Error('getUserMedia() error: ' + error.name))
         })
