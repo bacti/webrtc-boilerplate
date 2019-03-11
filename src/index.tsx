@@ -1,5 +1,7 @@
 import { h, render, Component } from 'preact'
 import { connect } from 'socket.io-client'
+const UUID = require('uuid/v1')
+
 import { Trace, Error } from './log'
 import { SERVER_DOMAIN, SERVER_PORT, CLIENT_PORT } from '../config'
 import './index.css'
@@ -11,14 +13,6 @@ const PEER_CONNECTION_CONFIG =
         {'urls': 'stun:stun.stunprotocol.org:3478'},
         {'urls': 'stun:stun.l.google.com:19302'},
     ]
-}
-
-const Identifier =
-{
-    get random()
-    {
-        return [...Array(16)].reduce(code => code + '0123456789ABDEFGHJKLMNPRSTUVXYZ'[~~(Math.random() * 31)], '')
-    }
 }
 
 class PeerGambler extends Component
@@ -48,7 +42,8 @@ class PeerGambler extends Component
             }
             else
             {
-                const signal = JSON.parse(message.data)
+                const signal = JSON.parse(message)
+                console.log(signal)
 
                 // // Ignore messages from ourself
                 // if(signal.uuid == uuid) return
@@ -74,7 +69,7 @@ class PeerGambler extends Component
         {
             if (event.candidate != null)
             {
-                this.socket.send('w.' + JSON.stringify({'ice': event.candidate, 'uuid': Identifier.random}))
+                this.socket.send('w.' + JSON.stringify({'ice': event.candidate, 'uuid': UUID()}))
             }
         }
         this.connection.ontrack = event =>
@@ -100,7 +95,7 @@ class PeerGambler extends Component
             this.socket.send('w.' + JSON.stringify(
             {
                 'sdp': this.connection.localDescription,
-                'uuid': Identifier.random,
+                'uuid': UUID(),
             }))
         })
     }
