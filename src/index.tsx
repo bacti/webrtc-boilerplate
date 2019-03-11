@@ -1,6 +1,6 @@
 import { h, render, Component } from 'preact'
 import { connect } from 'socket.io-client'
-import { Trace } from './log'
+import { Trace, Error } from './log'
 import { SERVER_DOMAIN, SERVER_PORT } from '../config'
 import './index.css'
 
@@ -37,14 +37,19 @@ class PeerGambler extends Component
                 this.socket.send(JSON.stringify({ 'ice': event.candidate, 'uuid': Identifier.random }))
             }
         }
+        this.connection.ontrack = event =>
+        {
+            const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
+            video_streaming.srcObject = event.streams[0]
+        }
     }
 
-    Start(isCaller)
+    Start()
     {
         // peerConnection = new RTCPeerConnection(PeerConnectionConfig);
         // peerConnection.onicecandidate = gotIceCandidate;
         // peerConnection.ontrack = gotRemoteStream;
-        // peerConnection.addStream(localStream);
+        // this.connection.addTrack(track)
       
         // if(isCaller) {
         //   peerConnection.createOffer().then(createdDescription).catch(errorHandler);
@@ -53,7 +58,6 @@ class PeerGambler extends Component
 
     componentDidMount()
     {
-        const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
         const btn_broadcast = document.getElementById('btn_broadcast') as HTMLInputElement
         btn_broadcast.addEventListener('click', (evt: Event) =>
         {
@@ -61,10 +65,11 @@ class PeerGambler extends Component
             navigator.mediaDevices.getUserMedia({ audio: false, video: true })
             .then(stream =>
             {
-                Trace('Received local stream')
+                const video_streaming = document.getElementById('video_streaming') as HTMLMediaElement
                 video_streaming.srcObject = stream
+                this.Start()
             })
-            .catch(error => alert('getUserMedia() error: ' + error.name))
+            .catch(error => Error('getUserMedia() error: ' + error.name))
         })
     }
 
