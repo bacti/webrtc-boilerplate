@@ -1,7 +1,7 @@
 import { h, render, Component } from 'preact'
 import { connect } from 'socket.io-client'
 import { Trace, Error } from './log'
-import { SERVER_DOMAIN, SERVER_PORT } from '../config'
+import { SERVER_DOMAIN, SERVER_PORT, CLIENT_PORT } from '../config'
 import './index.css'
 
 const PEER_CONNECTION_CONFIG =
@@ -25,11 +25,23 @@ class PeerGambler extends Component
 {
     private socket = connect(`ws://${SERVER_DOMAIN}:${SERVER_PORT}/`, {transports: ['websocket']})
     private connection = new RTCPeerConnection(PEER_CONNECTION_CONFIG)
+    private tableId = window.location.search.slice(1)
 
     constructor()
     {
         super()
         this.socket.on('connected', message => this.socket.send('n'))
+        this.socket.on('message', message =>
+        {
+            // console.log(message)
+            if (message.startsWith('n.'))
+			{
+				const [_, uri] = message.split('.')
+				const url = `http://${SERVER_DOMAIN}:${CLIENT_PORT}/?${uri}`
+				console.log(url)
+			}
+        })
+
         this.connection.onicecandidate = event =>
         {
             if (event.candidate != null)
