@@ -101,7 +101,7 @@ class PeerGambler extends Component
         return (
             <div id='container'>
                 <video id='video_streaming' muted autoPlay />
-                <div id='broadcast'>
+                <div id='broadcast' style={{ display: this.isdealer ? 'block' : 'none' }}>
                     <input type='button' value='Broadcast' id='btn_broadcast'></input>
                     <input type='text' value={this.state.url_broadcast} size={50} id='url_broadcast' disabled></input>
                 </div>

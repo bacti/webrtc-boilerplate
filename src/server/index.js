@@ -9,12 +9,5 @@ Server.on('connection', client =>
     client.emit('connected', { id: client.userid })
 
     client.on('message', message => RoomServer.OnMessage(client, message))
-    client.on('disconnect', evt =>
-    {
-        console.log(`User ${client.userid} disconnected`)
-        if (client.game && client.game.id)
-        {
-            RoomServer.EndGame(client.game.id, client.userid)
-        }
-    })
+    client.on('disconnect', evt => console.log(`User ${client.userid} disconnected`))
 })
