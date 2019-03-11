@@ -21,6 +21,7 @@ class PeerGambler extends Component
     private connection = new RTCPeerConnection(PEER_CONNECTION_CONFIG)
     private tableid = window.location.search.slice(1)
     private isdealer = this.tableid.length == 0
+    private uuid = UUID()
     state = { url_broadcast: '' }
 
     constructor()
@@ -69,7 +70,7 @@ class PeerGambler extends Component
             if (event.candidate != null)
             {
                 Trace('onicecandidate 1')
-                this.socket.send('w.' + JSON.stringify({'ice': event.candidate, 'uuid': UUID()}))
+                this.socket.send('w.' + JSON.stringify({'ice': event.candidate, 'uuid': this.uuid}))
             }
         }
         this.connection.ontrack = event =>
@@ -95,7 +96,7 @@ class PeerGambler extends Component
             this.socket.send('w.' + btoa(JSON.stringify(
             {
                 'sdp': this.connection.localDescription,
-                'uuid': UUID(),
+                'uuid': this.uuid,
             })))
         })
     }
