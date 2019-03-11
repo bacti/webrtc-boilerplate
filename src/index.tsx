@@ -32,10 +32,14 @@ class PeerGambler extends Component
     constructor()
     {
         super()
-        this.socket.on('connected', message => console.log(message))
+        this.socket.on('connected', message =>
+        {
+            console.log(message)
+            !this.isdealer && this.socket.send('f.' + this.tableid)
+        })
         this.socket.on('message', message =>
         {
-            // console.log(message)
+            Trace(message)
             if (message.startsWith('n.'))
 			{
 				const [_, uri] = message.split('.')
