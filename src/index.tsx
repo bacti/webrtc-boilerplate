@@ -39,7 +39,7 @@ class PeerGambler extends Component
         })
         this.socket.on('message', message =>
         {
-            Trace(message)
+            // Trace(message)
             if (message.startsWith('n.'))
 			{
 				const [_, uri] = message.split('.')
@@ -49,7 +49,6 @@ class PeerGambler extends Component
             else
             {
                 const signal = JSON.parse(atob(message))
-                console.log(signal)
                 if (signal.uuid == this.uuid)
                     return
                 if (signal.sdp)
