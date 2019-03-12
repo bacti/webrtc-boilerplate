@@ -1,6 +1,5 @@
-module.exports =
-{
-    SERVER_DOMAIN: 'localhost',
-    SERVER_PORT: 8443,
-    CLIENT_PORT: 8081,
-}
+module.exports = {
+  SERVER_DOMAIN: "localhost",
+  SERVER_PORT: 8443,
+  CLIENT_PORT: 8081
+};
