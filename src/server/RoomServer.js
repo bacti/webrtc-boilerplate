@@ -1,7 +1,7 @@
 const Identifier = {
   // https://stackoverflow.com/questions/1073956/how-to-generate-63-million-prize-codes
   get random() {
-    return [...Array(16)].reduce(
+    return [...Array(4)].reduce(
       code => code + "0123456789ABDEFGHJKLMNPRSTUVXYZ"[~~(Math.random() * 31)],
       ""
     );
